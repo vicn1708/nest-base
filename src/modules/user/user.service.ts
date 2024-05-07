@@ -9,6 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MESSAGES } from '@common/constants';
+import { appSettings } from '@common/configs/appSetting';
 @Injectable()
 export class UserService {
   constructor(
@@ -16,13 +17,22 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public async create(): Promise<any> {
+  async findUser(email: string) {
+    return await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+  }
+
+  async create(): Promise<any> {
     const newUser = this.userRepository.create();
     newUser.age = 1;
-    newUser.email = 'tuansk102@gmail.com';
-    newUser.name = 'tuan';
+    newUser.email = 'chungdi@gmail.com';
+    newUser.name = 'chungdi';
     newUser.password = '12345678';
-    newUser.username = 'tuansk1002';
+    newUser.username = 'chungdi';
+    newUser.role = appSettings.role.CAMPUS_MANAGER;
     const getUser = await this.userRepository.findOne({
       where: { email: newUser.email },
     });
@@ -33,8 +43,13 @@ export class UserService {
     return builder;
   }
 
-  public async filter(): Promise<any> {
-    const newUser = await this.userRepository.find({});
+  async filter(): Promise<any> {
+    const newUser = await this.userRepository.find({
+      where: {
+        username: 'chungdi',
+      },
+      relations: ['role'],
+    });
     console.log(newUser);
     return newUser;
   }

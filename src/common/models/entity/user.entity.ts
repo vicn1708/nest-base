@@ -1,27 +1,31 @@
 import { CustomEntity } from '@common/decorators/custom-entity.decorator';
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { Role } from './role.entity';
 
 @CustomEntity(User.name)
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'varchar', length: 30, name: 'name' })
+  @Column({ type: 'varchar', length: 30 })
   name: string;
 
-  @Column('text', { name: 'user_name' })
+  @Column('text')
   username: string;
 
-  @Column({ type: 'varchar', length: 40, name: 'email', unique: true })
+  @Column({ type: 'varchar', length: 40, unique: true, nullable: false })
   email: string;
 
   @Column({ type: 'int' })
   age: number;
 
-  @Column({ type: 'varchar', name: 'password' })
+  @Column({ type: 'text', nullable: true })
   password: string;
 
-  @Column({ type: 'text', nullable: true, name: 'passwo' })
-  passwords: string;
+  @ManyToOne(() => Role, (role) => role.users)
+  @JoinColumn({
+    name: 'role',
+  })
+  role: Role | number;
 }

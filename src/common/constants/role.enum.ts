@@ -1,1 +1,6 @@
-export enum TypeUser {}
+export enum UserRoles {
+  ADMIN = 'ADMIN',
+  CAMPUS_MANAGER = 'CAMPUS_MANAGER',
+  STUDENT = 'STUDENT',
+  TEACHER = 'TEACHER',
+}

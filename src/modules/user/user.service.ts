@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MESSAGES } from '@common/constants';
 import { appSettings } from '@common/configs/appSetting';
+import { hashing } from '@common/utils/hashing.util';
 @Injectable()
 export class UserService {
   constructor(
@@ -22,6 +23,7 @@ export class UserService {
       where: {
         email,
       },
+      relations: ['role'],
     });
   }
 
@@ -30,7 +32,7 @@ export class UserService {
     newUser.age = 1;
     newUser.email = 'chungdi@gmail.com';
     newUser.name = 'chungdi';
-    newUser.password = '12345678';
+    newUser.password = await hashing('12345678');
     newUser.username = 'chungdi';
     newUser.role = appSettings.role.CAMPUS_MANAGER;
     const getUser = await this.userRepository.findOne({

@@ -18,6 +18,7 @@ export class AuthService {
 
     if (user) {
       const isMatchPassword = await compareHash<String>(user.password, pass);
+
       if (!isMatchPassword) return null;
       const { password, ...result } = user;
       return result;
@@ -30,9 +31,12 @@ export class AuthService {
     const payloadRefresh = { typeToken: TypeJWT.REFRESH_TOKEN, ...payload };
 
     const [accessToken, refreshToken] = await Promise.all([
-      this.jwtService.signAsync(payloadAccess),
+      this.jwtService.signAsync(payloadAccess, {
+        secret: appSettings.jwt.secret,
+      }),
       this.jwtService.signAsync(payloadRefresh, {
         expiresIn: appSettings.jwt.expiresInRefresh,
+        secret: appSettings.jwt.secret,
       }),
     ]);
 
@@ -50,7 +54,9 @@ export class AuthService {
 
   async refreshToken(refreshToken: string) {
     const verify: ICurrentUser = await this.jwtService
-      .verifyAsync(refreshToken)
+      .verifyAsync(refreshToken, {
+        secret: appSettings.jwt.secret,
+      })
       .catch((err) => {
         throw new BadRequestException(err.message);
       });
@@ -64,6 +70,19 @@ export class AuthService {
     const token = await this.autoGenerateToken({ email: result.email });
 
     return {
+      token,
+    };
+  }
+
+  async login(result: ICurrentUser) {
+    const payload = {
+      email: result.email,
+    };
+
+    const token = await this.autoGenerateToken(payload);
+
+    return {
+      user: result,
       token,
     };
   }

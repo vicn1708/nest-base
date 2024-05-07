@@ -1,3 +1,4 @@
+import 'dotenv/config'
 export const development: boolean = true;
 
 export const appSettings = {

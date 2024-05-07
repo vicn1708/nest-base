@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import * as compression from 'compression';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
@@ -12,6 +11,8 @@ import {
   customLogsText,
 } from '@common/providers/logging/customLogging';
 import { inCluster } from './cluster';
+import { NestExpressApplication } from '@nestjs/platform-express';
+
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);

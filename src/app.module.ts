@@ -7,6 +7,7 @@ import { LoggingInterceptor } from '@common/interceptors/logging/logging.interce
 import { TransformInterceptor } from '@common/interceptors/transform/transform.interceptor';
 import { AllExceptionFilter } from '@common/exceptions/customExceptionFilter';
 import { ApiModule } from './modules/api.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { ApiModule } from './modules/api.module';
       isGlobal: true,
     }),
     ModelsModule,
+    UserModule,
     ApiModule,
   ],
   providers: [

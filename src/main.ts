@@ -13,7 +13,6 @@ import {
 import { inCluster } from './cluster';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
-
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -42,6 +41,9 @@ async function bootstrap() {
     const logging = new Logging();
     logging.debug(
       `${customLogsText.bold}${customLogsColor.pink}listening on port ${appSettings.port} 🚀`,
+    );
+    logging.debug(
+      `${customLogsText.bold}${customLogsColor.pink}api doc on http://localhost:${appSettings.port}/api-doc`,
     );
   });
 }

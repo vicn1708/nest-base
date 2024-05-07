@@ -7,5 +7,6 @@ import { ModelsModule } from '@common/models/models.module';
   imports: [ModelsModule],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

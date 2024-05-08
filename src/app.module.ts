@@ -8,6 +8,11 @@ import { TransformInterceptor } from '@common/interceptors/transform/transform.i
 import { AllExceptionFilter } from '@common/exceptions/customExceptionFilter';
 import { ApiModule } from './modules/api.module';
 import { UserModule } from '@modules/user/user.module';
+import { Caching } from './common/providers/caching/caching';
+import { CachingModule } from './common/providers/caching/caching.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { join } from 'path';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 
 @Module({
   imports: [
@@ -17,7 +22,30 @@ import { UserModule } from '@modules/user/user.module';
     ModelsModule,
     UserModule,
     ApiModule,
+    CachingModule,
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 587,
+        requireTLS: true,
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_ACCOUNT,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+        logger: true,
+      },
+      template: {
+        dir: join(__dirname, './shared/templates'),
+        adapter: new HandlebarsAdapter(),
+        options: {
+          strict: true,
+        },
+      },
+    }),
   ],
+
   providers: [
     Logging,
     {
@@ -32,6 +60,7 @@ import { UserModule } from '@modules/user/user.module';
       provide: APP_FILTER,
       useClass: AllExceptionFilter,
     },
+    Caching,
   ],
 })
 export class AppModule {}

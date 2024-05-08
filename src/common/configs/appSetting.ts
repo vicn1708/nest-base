@@ -25,4 +25,10 @@ export const appSettings = {
     STUDENT: Number(process.env.ROLE_STUDENT),
     TEACHER: Number(process.env.ROLE_TEACHER),
   },
+  do_endpoint: process.env.DO_ENDPOINT,
+  do_access_key: process.env.DO_ACCESS_KEY,
+  do_secret_key: process.env.DO_SECRECT_KEY,
+  do_bucket: process.env.DO_BUCKET,
+  email_account: process.env.EMAIL_ACCOUNT,
+  // email_from: process.env.EMAIL_FROM,
 };

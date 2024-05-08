@@ -1,5 +1,11 @@
 import { CustomEntity } from '@common/decorators/custom-entity.decorator';
-import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { Role } from './role.entity';
 
@@ -11,10 +17,12 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 30 })
   name: string;
 
+  @Index()
   @Column('text')
   username: string;
 
-  @Column({ type: 'varchar', length: 40, unique: true, nullable: false })
+  @Index({ unique: true })
+  @Column({ type: 'varchar', length: 40, nullable: false })
   email: string;
 
   @Column({ type: 'int' })
@@ -23,6 +31,7 @@ export class User extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   password: string;
 
+  @Index()
   @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({
     name: 'role',
